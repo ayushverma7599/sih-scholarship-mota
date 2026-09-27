@@ -371,7 +371,7 @@ Detailed runbook: [docs/DEMO.md](docs/DEMO.md). In short:
    activity → open the **Audit Log** to show every override and config change recorded.
 
 ## Modules
-See [CLAUDE.md](CLAUDE.md) for the full service map and conventions, and
+See [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) for the full service map and conventions, and
 [docs/API.md](docs/API.md) for a curl-able endpoint tour (OpenAPI at `/docs`).
 
 ## Testing
