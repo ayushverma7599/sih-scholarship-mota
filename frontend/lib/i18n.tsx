@@ -5,7 +5,8 @@ type Lang = "en" | "hi";
 
 // Bilingual dictionary. Structure is ready to extend to more languages.
 const DICT: Record<string, { en: string; hi: string }> = {
-  app_name: { en: "Scholarship & Fellowship Portal", hi: "छात्रवृत्ति एवं फ़ेलोशिप पोर्टल" },
+  app_name: { en: "UNNATI", hi: "उन्नति" },
+  tagline: { en: "Scholarship & Fellowship Portal", hi: "छात्रवृत्ति एवं फ़ेलोशिप पोर्टल" },
   ministry: { en: "Ministry of Tribal Affairs", hi: "जनजातीय कार्य मंत्रालय" },
   govt_india: { en: "Government of India", hi: "भारत सरकार" },
   login: { en: "Login", hi: "लॉगिन" },

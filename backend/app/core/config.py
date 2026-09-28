@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     # --- Core ---
-    APP_NAME: str = "MoTA Scholarship & Fellowship Management System"
+    APP_NAME: str = "UNNATI — Scholarship & Fellowship Management System"
     ENV: str = "development"
     API_PREFIX: str = "/api"
 

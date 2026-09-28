@@ -1,9 +1,9 @@
-# AI-Enabled Scholarship & Fellowship Management System for Scheduled Tribes
+# UNNATI — AI-Enabled Scholarship & Fellowship Management System for Scheduled Tribes
 
 **Smart India Hackathon 2026 · Problem Statement 26239 · Ministry of Tribal Affairs (MoTA)**
 Theme: Smart Education · Category: Software
 
-> One secure, transparent and intelligent platform for MoTA's Scheduled-Tribe
+> **UNNATI** is one secure, transparent and intelligent platform for MoTA's Scheduled-Tribe
 > scholarship & fellowship schemes (**NFST**, **NOS**). Scheme eligibility rules,
 > required documents and selection criteria are **fully configurable (no code)**.
 > An AI layer assists verification — but **every automated decision is

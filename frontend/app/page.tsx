@@ -53,6 +53,7 @@ export default function LoginPage() {
           </button>
           <div className="text-sm text-white/70">{t("govt_india")} · {t("ministry")}</div>
           <h1 className="text-3xl lg:text-4xl font-bold mt-2 leading-tight">{t("app_name")}</h1>
+          <div className="text-lg text-white/80 mt-1">{t("tagline")}</div>
           <p className="text-white/80 mt-4 max-w-md">
             {lang === "en"
               ? "One secure, transparent and intelligent platform for Scheduled Tribe scholarships & fellowships (NFST, NOS). Configurable rules, AI-assisted verification, and human-reviewed decisions."

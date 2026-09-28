@@ -52,7 +52,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             <div className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center text-xl">🇮🇳</div>
             <div>
               <div className="text-xs text-white/70 leading-tight">{t("govt_india")} · {t("ministry")}</div>
-              <div className="font-semibold leading-tight">{t("app_name")}</div>
+              <div className="font-semibold leading-tight">{t("app_name")} <span className="font-normal text-white/60 text-xs">· {t("tagline")}</span></div>
             </div>
           </div>
           <nav className="hidden md:flex items-center gap-1 ml-6">
