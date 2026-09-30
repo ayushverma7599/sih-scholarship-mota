@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { api } from "@/lib/api";
+import { api, apiDownload, ApiError } from "@/lib/api";
 import { StatCard, Card, Spinner, SectionTitle, Button } from "@/components/ui";
 import { BarCard, PieCard, FunnelCard } from "@/components/Charts";
 import { inr } from "@/lib/utils";
@@ -10,6 +10,19 @@ export default function AdminDashboard() {
   const [kpis, setKpis] = useState<any>(null);
   const [charts, setCharts] = useState<any>(null);
   const [perf, setPerf] = useState<any>(null);
+  const [downloading, setDownloading] = useState<string | null>(null);
+
+  const exportReport = async (format: "csv" | "pdf") => {
+    setDownloading(format);
+    try {
+      const ts = new Date().toISOString().slice(0, 10);
+      await apiDownload(`/dashboard/reports/export?format=${format}`, `unnati-report-${ts}.${format}`);
+    } catch (e) {
+      alert(e instanceof ApiError ? `Export failed: ${e.message}` : "Export failed");
+    } finally {
+      setDownloading(null);
+    }
+  };
 
   useEffect(() => {
     api("/dashboard/kpis").then(setKpis).catch(() => {});
@@ -24,8 +37,12 @@ export default function AdminDashboard() {
           Ministry Dashboard
         </SectionTitle>
         <div className="flex gap-2">
-          <a href="/api/reports/export?format=csv" className="btn-ghost"><Download size={16} /> CSV</a>
-          <a href="/api/reports/export?format=pdf" className="btn-ghost"><Download size={16} /> PDF</a>
+          <Button variant="ghost" onClick={() => exportReport("csv")} loading={downloading === "csv"}>
+            <Download size={16} /> CSV
+          </Button>
+          <Button variant="ghost" onClick={() => exportReport("pdf")} loading={downloading === "pdf"}>
+            <Download size={16} /> PDF
+          </Button>
         </div>
       </div>
 

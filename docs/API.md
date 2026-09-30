@@ -86,7 +86,7 @@ curl -s localhost:8000/api/fellowships/1/disbursements -H "Authorization: Bearer
 
 curl -s localhost:8000/api/dashboard/kpis   -H "Authorization: Bearer $ADMIN"
 curl -s localhost:8000/api/dashboard/charts -H "Authorization: Bearer $ADMIN"
-curl -s "localhost:8000/api/reports/export?format=csv" -H "Authorization: Bearer $ADMIN" -o report.csv
+curl -s "localhost:8000/api/dashboard/reports/export?format=csv" -H "Authorization: Bearer $ADMIN" -o report.csv
 curl -s "localhost:8000/api/audit?entity=ai_flag" -H "Authorization: Bearer $ADMIN"
 
 # Gov mocks (labelled "mock": true)

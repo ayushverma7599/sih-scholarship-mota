@@ -44,3 +44,43 @@ export class ApiError extends Error {
 }
 
 export const fileUrl = (docId: number) => `${BASE}/documents/${docId}/file`;
+
+/**
+ * Download a protected file (CSV/PDF/etc.). A plain <a href> can't send the JWT,
+ * so we fetch with the auth header, then trigger a save from the returned blob.
+ */
+export async function apiDownload(path: string, filename: string): Promise<void> {
+  const headers: Record<string, string> = {};
+  const token = getToken();
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+
+  const res = await fetch(`${BASE}${path}`, { headers });
+  if (!res.ok) {
+    let detail = res.statusText;
+    try { detail = (await res.json()).detail ?? detail; } catch {}
+    throw new ApiError(typeof detail === "string" ? detail : "Download failed", res.status);
+  }
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+/**
+ * Fetch a protected file with auth and return a blob object URL — for viewing in
+ * an <iframe> or a new tab (which also can't send the JWT header on their own).
+ * The caller is responsible for URL.revokeObjectURL() when done.
+ */
+export async function apiObjectUrl(path: string): Promise<string> {
+  const headers: Record<string, string> = {};
+  const token = getToken();
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+  const res = await fetch(`${BASE}${path}`, { headers });
+  if (!res.ok) throw new ApiError("Could not load file", res.status);
+  return URL.createObjectURL(await res.blob());
+}

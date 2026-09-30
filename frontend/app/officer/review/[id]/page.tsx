@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { api, ApiError } from "@/lib/api";
+import { api, apiObjectUrl, ApiError } from "@/lib/api";
 import { Button, Card, Badge, Textarea, Spinner, Modal, SectionTitle, Empty } from "@/components/ui";
 import { STATUS_META, RISK_CLS, SEVERITY_CLS, prettyDoc } from "@/lib/utils";
 import { Clock, ShieldAlert, FileText, Check } from "lucide-react";
@@ -17,11 +17,24 @@ export default function ReviewPage() {
   const [defItems, setDefItems] = useState<{ doc_type: string; message: string }[]>([{ doc_type: "", message: "" }]);
   const [busy, setBusy] = useState(false);
 
+  const [docUrl, setDocUrl] = useState<string | null>(null);
+
   const load = () => api(`/scrutiny/${id}`).then((a) => {
     setApp(a);
     if (a.documents?.length && activeDoc === null) setActiveDoc(a.documents[0].id);
   }).catch(() => setApp(null));
   useEffect(() => { load(); }, [id]);
+
+  // Load the active document as an authenticated blob URL (an <iframe> can't send the JWT).
+  useEffect(() => {
+    if (activeDoc == null) { setDocUrl(null); return; }
+    let revoked: string | null = null;
+    setDocUrl(null);
+    apiObjectUrl(`/documents/${activeDoc}/file`)
+      .then((url) => { revoked = url; setDocUrl(url); })
+      .catch(() => setDocUrl(null));
+    return () => { if (revoked) URL.revokeObjectURL(revoked); };
+  }, [activeDoc]);
 
   if (!app) return <Spinner />;
   const meta = STATUS_META[app.status] || { label: app.status, cls: "" };
@@ -76,7 +89,11 @@ export default function ReviewPage() {
           </div>
           {doc ? (
             <div className="h-[70vh] bg-slate-100">
-              <iframe src={`/api/documents/${doc.id}/file`} className="w-full h-full" title="Document" />
+              {docUrl ? (
+                <iframe src={docUrl} className="w-full h-full" title="Document" />
+              ) : (
+                <div className="h-full flex items-center justify-center"><Spinner label="Loading document…" /></div>
+              )}
             </div>
           ) : <Empty>No documents uploaded.</Empty>}
         </Card>

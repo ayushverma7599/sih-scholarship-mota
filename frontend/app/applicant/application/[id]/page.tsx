@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
-import { api, ApiError, fileUrl } from "@/lib/api";
+import { api, ApiError, apiDownload, apiObjectUrl } from "@/lib/api";
 import { Button, Card, Badge, Textarea, Spinner, SectionTitle, Empty } from "@/components/ui";
 import Timeline from "@/components/Timeline";
 import { STATUS_META, prettyDoc, inr } from "@/lib/utils";
@@ -63,9 +63,11 @@ export default function ApplicationTracker() {
         {isSelected && (
           <Card>
             <SectionTitle sub="Provisional selection (prototype).">🎉 Selected</SectionTitle>
-            <a href={`/api/selection/${id}/letter.pdf`} target="_blank" rel="noreferrer">
-              <Button variant="accent"><Download size={16} /> Download selection letter</Button>
-            </a>
+            <Button variant="accent"
+              onClick={() => apiDownload(`/selection/${id}/letter.pdf`, `selection-letter-${id}.pdf`)
+                .catch((e) => alert(e instanceof ApiError ? e.message : "Download failed"))}>
+              <Download size={16} /> Download selection letter
+            </Button>
           </Card>
         )}
       </div>
@@ -125,7 +127,10 @@ export default function ApplicationTracker() {
                     <span className="font-medium">{prettyDoc(d.doc_type)}</span>
                     <div className="flex items-center gap-2">
                       <span className="text-xs text-slate-400">Readability {(d.readability * 100).toFixed(0)}%</span>
-                      <a href={`/api/documents/${d.id}/file`} target="_blank" rel="noreferrer" className="text-sky text-xs hover:underline">View</a>
+                      <button onClick={() => apiObjectUrl(`/documents/${d.id}/file`)
+                        .then((url) => window.open(url, "_blank"))
+                        .catch(() => alert("Could not open document"))}
+                        className="text-sky text-xs hover:underline">View</button>
                     </div>
                   </div>
                   {d.extracted?.length > 0 && (
